@@ -1,18 +1,22 @@
 package edu.eci.arsw.samples;
 
+import java.util.concurrent.CountDownLatch;
+
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		int numHilos=20;
+		CountDownLatch latch = new CountDownLatch(numHilos);
 		
 		HiloProc[] hilos=new HiloProc[numHilos];
 		
 		for (int i=0;i<numHilos;i++){
-			hilos[i]=new HiloProc(i);
+			hilos[i]=new HiloProc(i, latch);
 		}
 		for (int i=0;i<numHilos;i++){
 			hilos[i].start();
 		}
+		latch.await();
 
 		long tiempoPromedio=0;
 		
